@@ -12,20 +12,25 @@ console.log('Server starting...');
 dotenv.config();
 console.log('Environment variables loaded');
 
-// Initialize Firebase Admin only if credentials are available
-if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
-    try {
-        admin.initializeApp({
-            credential: admin.credential.cert({
-                projectId: process.env.FIREBASE_PROJECT_ID,
-                clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-                privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
-            })
-        });
-        console.log('Firebase Admin initialized');
-    } catch (error) {
-        console.error('Firebase Admin initialization failed:', error);
-    }
+// Initialize Firebase Admin only if credentials are available and not already initialized
+if (
+  process.env.FIREBASE_PROJECT_ID &&
+  process.env.FIREBASE_CLIENT_EMAIL &&
+  process.env.FIREBASE_PRIVATE_KEY &&
+  !admin.apps.length
+) {
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+      })
+    });
+    console.log('Firebase Admin initialized');
+  } catch (error) {
+    console.error('Firebase Admin initialization failed:', error);
+  }
 }
 
 const app = express();

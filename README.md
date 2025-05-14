@@ -89,3 +89,4 @@ A restaurant loyalty application that allows customers to scan QR codes, registe
 - QR Code
 - Geolocation API
 - Tailwind CSS 
+good app

@@ -89,6 +89,12 @@ const Navbar = () => {
             >
               <MenuItem onClick={() => {
                 handleClose();
+                navigate('/profile');
+              }}>
+                Profile
+              </MenuItem>
+              <MenuItem onClick={() => {
+                handleClose();
                 navigate('/dashboard');
               }}>
                 Dashboard

@@ -21,6 +21,7 @@ import DigitalPassManager from './components/Restaurant/DigitalPassManager';
 import Dashboard from './components/Dashboard/Dashboard';
 import Settings from './components/Settings/Settings';
 import DinerRegistration from './components/Diner/DinerRegistration';
+import UserProfile from './components/UserProfile';
 
 const theme = createTheme({
   palette: {
@@ -186,6 +187,14 @@ function AppContent() {
         />
         <Route path="/diner-register/:restaurantId" element={<DinerRegistration />} />
         <Route path="/add-pass/:restaurantId" element={<div style={{padding: 40, textAlign: 'center'}}><h2>Pass Upload Coming Soon!</h2><p>Here you will be able to add your digital pass to your phone.</p></div>} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
