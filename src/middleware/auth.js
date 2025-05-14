@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = function(req, res, next) {
+function auth(req, res, next) {
     // Get token from header
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -15,7 +15,7 @@ module.exports = function(req, res, next) {
     try {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded.user;
+        req.user = decoded;
         next();
     } catch (err) {
         res.status(401).json({
@@ -23,4 +23,6 @@ module.exports = function(req, res, next) {
             error: 'Token is not valid'
         });
     }
-}; 
+}
+
+module.exports = auth; 

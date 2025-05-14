@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Register from './Register';
 import Login from './Login';
+import UserProfile from './UserProfile';
+import './App.css';
 
 function App() {
   const [message, setMessage] = useState('Loading...');
@@ -31,11 +33,11 @@ function App() {
   }, []);
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="app-container">
       <h1>Backend Health Check</h1>
       <p>Status: {message}</p>
       {error && (
-        <p style={{ color: 'red' }}>
+        <p className="error">
           Error details: {error}
         </p>
       )}
@@ -49,6 +51,7 @@ function App() {
       </div>
       <Register />
       <Login />
+      <UserProfile />
     </div>
   );
 }
