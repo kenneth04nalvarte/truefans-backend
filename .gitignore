@@ -92,7 +92,7 @@ firebase-service-account.json
 google-maps-api-key.txt
 
 # Frontend projects
-my-new-frontend/
+# my-new-frontend/
 truefans-frontend/
 
 # Build output
