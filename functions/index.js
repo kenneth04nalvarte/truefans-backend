@@ -1,6 +1,8 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp();
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
 
 // Middleware to check if the request is from an admin
 const isAdmin = async (req) => {

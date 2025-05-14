@@ -5,9 +5,11 @@ const API_URL = 'https://truefans-1x9dv06s8-kenneths-projects-b5a1aa89.vercel.ap
 
 // Initialize Firebase Admin
 const serviceAccount = require('../../firebase-service-account.json');
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+}
 
 async function getAuthToken() {
   try {
