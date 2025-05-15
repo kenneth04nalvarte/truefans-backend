@@ -17,7 +17,8 @@ const securityMiddleware = (app) => {
     app.use(cors({
         origin: [
             'https://truefans.vercel.app',
-            'http://localhost:3000'
+            'http://localhost:3000',
+            /^https:\/\/truefans-frontend.*\.vercel\.app$/
         ],
         credentials: true, // Allow credentials
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
