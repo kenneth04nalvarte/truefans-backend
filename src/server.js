@@ -83,6 +83,11 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
+// Connect to MongoDB with logging
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected successfully!'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
 // Test MongoDB connection
 app.get('/test-mongo', async (req, res) => {
   try {
