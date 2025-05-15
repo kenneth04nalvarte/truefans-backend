@@ -15,7 +15,10 @@ const limiter = rateLimit({
 const securityMiddleware = (app) => {
     // Enable CORS with a more permissive configuration
     app.use(cors({
-        origin: true, // Allow all origins
+        origin: [
+            'https://truefans.vercel.app',
+            'http://localhost:3000'
+        ],
         credentials: true, // Allow credentials
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
