@@ -15,12 +15,20 @@ const limiter = rateLimit({
 const securityMiddleware = (app) => {
     // Enable CORS with a more permissive configuration
     app.use(cors({
-        origin: [
-            'https://truefans.vercel.app',
-            'http://localhost:3000',
-            /^https:\/\/truefans-frontend.*\.vercel\.app$/
-        ],
-        credentials: true, // Allow credentials
+        origin: function (origin, callback) {
+            const allowed = [
+                'https://truefans.vercel.app',
+                'http://localhost:3000'
+            ];
+            // Allow all Vercel preview URLs
+            const vercelPreview = /^https:\/\/truefans-frontend.*\.vercel\.app$/;
+            if (!origin || allowed.includes(origin) || vercelPreview.test(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
     }));
