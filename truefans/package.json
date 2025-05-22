@@ -22,7 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
-    "stripe": "^12.18.0"
+    "stripe": "^12.18.0",
+    "xss-clean": "^0.1.4"
   },
   "devDependencies": {
     "axios": "^1.9.0",
