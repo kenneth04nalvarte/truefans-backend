@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const Restaurant = require('../models/Restaurant');
+const { db } = require('../config/firebaseAdmin');
 const QRCode = require('qrcode');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // Create new restaurant
 router.post('/', async (req, res) => {
     try {
-        const { name, owner, location, address } = req.body;
+        const { name, owner, location, address, email } = req.body;
         
         // Generate QR code
         const qrData = JSON.stringify({
@@ -19,23 +19,26 @@ router.post('/', async (req, res) => {
         const stripeAccount = await stripe.accounts.create({
             type: 'express',
             country: 'US',
-            email: req.body.email,
+            email: email,
             capabilities: {
                 card_payments: { requested: true },
                 transfers: { requested: true },
             },
         });
 
-        const restaurant = new Restaurant({
+        // Add restaurant to Firestore
+        const restaurantData = {
             name,
             owner,
             location,
             address,
             qrCode,
-            stripeAccountId: stripeAccount.id
-        });
+            stripeAccountId: stripeAccount.id,
+            createdAt: new Date()
+        };
+        const docRef = await db.collection('restaurants').add(restaurantData);
+        const restaurant = { id: docRef.id, ...restaurantData };
 
-        await restaurant.save();
         res.status(201).json({ message: 'Restaurant created successfully', restaurant });
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -46,21 +49,23 @@ router.post('/', async (req, res) => {
 router.put('/:id/promotion', async (req, res) => {
     try {
         const { title, description, discount, validUntil } = req.body;
-        const restaurant = await Restaurant.findById(req.params.id);
+        const docRef = db.collection('restaurants').doc(req.params.id);
+        const doc = await docRef.get();
 
-        if (!restaurant) {
+        if (!doc.exists) {
             return res.status(404).json({ message: 'Restaurant not found' });
         }
 
-        restaurant.currentPromotion = {
+        const promotion = {
             title,
             description,
             discount,
             validUntil: new Date(validUntil)
         };
 
-        await restaurant.save();
-        res.json({ message: 'Promotion updated successfully', restaurant });
+        await docRef.update({ currentPromotion: promotion });
+        const updatedDoc = await docRef.get();
+        res.json({ message: 'Promotion updated successfully', restaurant: { id: updatedDoc.id, ...updatedDoc.data() } });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -69,11 +74,13 @@ router.put('/:id/promotion', async (req, res) => {
 // Get restaurant by QR code
 router.get('/qr/:qrCode', async (req, res) => {
     try {
-        const restaurant = await Restaurant.findOne({ qrCode: req.params.qrCode });
-        if (!restaurant) {
+        const snapshot = await db.collection('restaurants').where('qrCode', '==', req.params.qrCode).get();
+        if (snapshot.empty) {
             return res.status(404).json({ message: 'Restaurant not found' });
         }
-        res.json(restaurant);
+        // Return the first match
+        const doc = snapshot.docs[0];
+        res.json({ id: doc.id, ...doc.data() });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
