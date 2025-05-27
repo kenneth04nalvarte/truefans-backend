@@ -20,7 +20,6 @@ A restaurant loyalty application that allows customers to scan QR codes, registe
 ## Prerequisites
 
 - Node.js (v14 or higher)
-- MongoDB
 - Stripe account
 - Modern web browser with geolocation support
 
@@ -35,7 +34,6 @@ A restaurant loyalty application that allows customers to scan QR codes, registe
 3. Create a `.env` file in the root directory with the following variables:
    ```
    PORT=5000
-   MONGODB_URI=mongodb://localhost:27017/restaurant-loyalty
    STRIPE_SECRET_KEY=your_stripe_secret_key
    STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
    STRIPE_PRICE_ID=your_stripe_price_id  # $15/month subscription price ID
@@ -84,7 +82,6 @@ A restaurant loyalty application that allows customers to scan QR codes, registe
 ## Technologies Used
 
 - Express.js
-- MongoDB
 - Stripe
 - QR Code
 - Geolocation API

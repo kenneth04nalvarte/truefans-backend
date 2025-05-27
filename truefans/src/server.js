@@ -5,7 +5,6 @@ const path = require('path');
 const securityMiddleware = require('./middleware/security');
 const errorHandler = require('./middleware/errorHandler');
 const admin = require('firebase-admin');
-const mongoose = require('mongoose');
 
 // Load environment variables
 console.log('Server starting...');
@@ -58,18 +57,6 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.join(__dirname, '../public', 'index.html'));
     });
 }
-
-// Test MongoDB connection
-app.get('/test-mongo', async (req, res) => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-    console.log('MongoDB connection successful!');
-    res.send('MongoDB connection successful!');
-  } catch (err) {
-    console.error('MongoDB connection failed:', err);
-    res.status(500).send('MongoDB connection failed: ' + err.message);
-  }
-});
 
 // Error handling middleware (should be last)
 app.use(errorHandler);

@@ -11,7 +11,6 @@ router.post('/', async (req, res) => {
         
         // Generate QR code
         const qrData = JSON.stringify({
-            restaurantId: new mongoose.Types.ObjectId(),
             timestamp: Date.now()
         });
         const qrCode = await QRCode.toDataURL(qrData);
